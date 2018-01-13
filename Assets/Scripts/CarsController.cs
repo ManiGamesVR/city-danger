@@ -16,15 +16,15 @@ public class CarsController : MonoBehaviour {
     private List<GameObject> cars1 = new List<GameObject>();
     private List<GameObject> cars2 = new List<GameObject>();
 
-    private Vector3 zSpeed = new Vector3(0, 0, -10);
-    private Vector3 xSpeed = new Vector3(-10, 0, 0);
+    private Vector3 zSpeed = new Vector3(0, 0, -5);
+    private Vector3 xSpeed = new Vector3(-5, 0, 0);
 
 
     // Use this for initialization
     void Start () {
 
-        InvokeRepeating("InstantiateCar1", 0, 1.0f);
-        InvokeRepeating("InstantiateCar2", 0, 1.0f);
+        InvokeRepeating("InstantiateCar1", 0, 2.0f);
+        InvokeRepeating("InstantiateCar2", 0, 3.0f);
 
     }
 
@@ -53,34 +53,36 @@ public class CarsController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        for(int i = 0; i < cars1.Count; i++)
+        updateCars(cars1, zSpeed, 'z', 50);
+        updateCars(cars2, xSpeed, 'x', 50);
+    }
+
+    void updateCars(List<GameObject> cars, Vector3 force, char axis, int threshold)
+    {
+        for (int i=0; i < cars.Count; i++)
         {
-            if (cars1[i])
+            if (cars[i])
             {
-                cars1[i].GetComponent<Rigidbody>().AddForce(zSpeed);
-
-                if (cars1[i].transform.position.z < -50)
-                {     
-                    Destroy(cars1[i]);
-                    //InstantiateCar(spawn1, cars1, spawn1Rotation);
-                }
-            }
-        }
-
-        for (int i = 0; i < cars2.Count; i++)
-        {
-            if (cars2[i])
-            {
-                cars2[i].GetComponent<Rigidbody>().AddForce(xSpeed);
-
-                if (cars2[i].transform.position.x < -50)
+                cars[i].GetComponent<Rigidbody>().AddForce(force);
+                int absThreshold = Mathf.Abs(threshold);
+                switch (axis)
                 {
-                    Destroy(cars2[i]);
-                    // InstantiateCar(spawn2, cars2, spawn2Rotation);
+                    case 'x':
+                        if (Mathf.Abs(cars[i].transform.position.x) > absThreshold)
+                            Destroy(cars[i]);
+                        break;
+                    case 'y':
+                        if (Mathf.Abs(cars[i].transform.position.y) > absThreshold)
+                            Destroy(cars[i]);
+                        break;
+                    case 'z':
+                        if (Mathf.Abs(cars[i].transform.position.z) > absThreshold)
+                            Destroy(cars[i]);
+                        break;
+
                 }
+
             }
         }
-
-
     }
 }
