@@ -19,8 +19,9 @@ public class SimpleCharacterControl : MonoBehaviour {
     [SerializeField] private float m_jumpForce = 4;
     [SerializeField] private Animator m_animator;
     [SerializeField] private Rigidbody m_rigidBody;
+    [SerializeField] private float timeToWalk = 5f;
 
-    [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
+    [SerializeField] private ControlMode m_controlMode = ControlMode.Auto;
 
     private float m_currentV = 0;
     private float m_currentH = 0;
@@ -118,6 +119,14 @@ public class SimpleCharacterControl : MonoBehaviour {
 
     private void AutoUpdate()
     {
+        if (timeToWalk > 0)
+            timeToWalk -= Time.deltaTime;
+        else
+        {
+            m_animator.SetFloat("MoveSpeed", 0);
+            return;
+        }
+
         float v = autoInputWalk;
         float h = autoInputRotate;
 
