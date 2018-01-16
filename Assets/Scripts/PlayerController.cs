@@ -2,23 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour {
 
     public Transform vrCamera;
 
-    private float rotationThreshold = 30f;
-    private float rotationMax = 90f;
+    private float rotationThreshold = 10f;
+    private float rotationMax = 40f;
     private float movementSpeed = 3f;
 
     private bool moveForward = false;
 
-    private CharacterController characterController;
-
-	void Start () {
-        characterController = GetComponent<CharacterController>();
-	}
-	
 	void Update () {
 	    if (vrCamera.eulerAngles.x >= rotationThreshold && vrCamera.eulerAngles.x <= rotationMax)
         {
@@ -31,8 +24,8 @@ public class PlayerController : MonoBehaviour {
 
         if (moveForward)
         {
-            Vector3 fwd = vrCamera.TransformDirection(Vector3.forward);
-            characterController.SimpleMove(fwd * movementSpeed);
+            Vector3 moveDir = new Vector3(vrCamera.transform.forward.x, 0, vrCamera.transform.forward.z);
+            transform.position += moveDir * Time.deltaTime * movementSpeed;
         }
 	}
 }
